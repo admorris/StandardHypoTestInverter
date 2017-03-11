@@ -172,7 +172,7 @@ namespace RooStats
 		{
 			if(options.PoiMin > options.PoiMax)
 			{
-				// ifno min/max given scan between MLE and +4 sigma
+				// if no min/max given scan between MLE and +4 sigma
 				options.PoiMin = int(poi->getVal());
 				options.PoiMax = int(poi->getVal() +  4 * poi->getError());
 			}
