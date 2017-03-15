@@ -2,6 +2,7 @@
 // ROOT
 #include "TCanvas.h"
 #include "TFile.h"
+#include "TProofLite.h"
 // RooFit
 #include "RooRandom.h"
 // RooStats
