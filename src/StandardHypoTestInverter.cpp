@@ -28,16 +28,7 @@ void StandardHypoTestInverter(std::string infile, std::string wsName, std::strin
 	}
 	else
 	{
-		// If workspace is not present, look for the inverter result
-		Info("StandardHypoTestInverter", "Reading an HypoTestInverterResult with name %s from file %s", wsName.c_str(), infile.c_str());
-		r = dynamic_cast<RooStats::HypoTestInverterResult*>(file->Get(wsName.c_str()));
-		if(!r)
-		{
-			Error("StandardHypoTestInverter", "File %s does not contain a workspace or an HypoTestInverterResult", infile.c_str());
-			file->ls();
-			return;
-		}
+		calc.AnalyzeResult( *r, "Saved_HypoTestInverterResult" );
 	}
-	calc.AnalyzeResult( *r, infile );
 	return;
 }
