@@ -33,12 +33,31 @@ The workspace must contain:
 - (optional) a `ModelConfig` for background,
 - (optional) a prior PDF with nuisance parameters.
 
+An example with nuisance parameters would be:
+
+    RooWorkspace workspace("workspace");
+    workspace.import(poi) // Parameter of interest
+    workspace.import(fitmodel) // Signal+background PDF
+    workspace.import(data) // Dataset imported on variable x
+    workspace.import(prior) // Prior PDF
+    workspace.defineSet("obs",RooArgSet(x));
+    workspace.defineSet("poi",RooArgSet(poi));
+    ModelConfig sb_model("sb_model",workspace);
+    sb_model.SetPdf(*workspace.pdf("fitmodel"));
+    sb_model.SetPriorPdf(*workspace.pdf("prior"));
+    sb_model.SetNuisanceParameters(RooArgSet(nuisPar)); // Parameter set contained within prior PDF
+    sb_model.SetObservables(*workspace.set("obs"));
+    sb_model.SetParametersOfInterest(*workspace.set("poi"));
+    workspace.import(sb_model);
+
+The names of the objects are passed to the program at the command line.
+
 ## Usage
 
 The syntax is `bin/main InputFile Workspace ModelSB Data [Options]`.
 
-Command line option                  | Description
--------------------------------------|-------------
+Command line option                   | Description
+--------------------------------------|-------------
 `--ModelB`                            | optional background model name
 `--NuisPrior`                         | optional nuisance prior name
 `--EnableDetOutput`<br/>(default 0)   | enable detailed output with all fit information for each toys (output will be written in result file)
