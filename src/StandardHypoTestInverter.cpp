@@ -28,7 +28,7 @@ void StandardHypoTestInverter(std::string infile, std::string wsName, std::strin
 	}
 	else
 	{
-		calc.AnalyzeResult( *r, "Saved_HypoTestInverterResult" );
+		calc.AnalyzeResult( *r, "Saved_HypoTestInverterResult.root" );
 	}
 	return;
 }

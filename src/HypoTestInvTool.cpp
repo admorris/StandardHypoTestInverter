@@ -545,7 +545,7 @@ namespace RooStats
 		TCanvas c1(c1Name.c_str());
 		c1.SetLogy(true);
 		plot.Draw("CLb 2CL");  // plot all and Clb
-		c1.SaveAs(c1.GetName(),"ROOT");
+		c1.SaveAs(((std::string)c1.GetName()+".root").c_str());
 		const int nEntries = r.ArraySize();
 		TCanvas c2("Test_Stat_Plots");
 		if(nEntries > 1)
@@ -561,7 +561,7 @@ namespace RooStats
 			pl->SetLogYaxis(true);
 			pl->Draw();
 		}
-		c2.SaveAs(c2.GetName(),"ROOT");
+		c2.SaveAs(((std::string)c2.GetName()+".root").c_str());
 	}
 } // end namespace RooStats
 
