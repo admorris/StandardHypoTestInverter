@@ -13,21 +13,6 @@ void StandardHypoTestInverter(std::string infile, std::string wsName, std::strin
 		Error("StandardHypoTestInverter", "Input file %s is not found", infile.c_str());
 		return;
 	}
-	// Set options using the HypoTestInvOptions struct. For the full set of options with their default values, see the HypoTestInvOptions.h header file
-	// The really important options are
-	//	UseCLs             : scan for CLs (otherwise for CLs+b)
-	//	NPoints            : number of points to scan, for autoscan set npoints = -1
-	//	PoiMin             : min/max value to scan in case of fixed scans
-	//	PoiMax             : (if min > max, try to find automatically)
-	//	NToys              : number of toys per point
-	//	UseNumberCounting  : set to true when using number counting events
-	// Other major options are
-	//	PlotHypoTestResult : plot result of tests at each point (TS distributions) (default is true)
-	//	UseProof           : use Proof   (default is true)
-	//	WriteResult        : write result of scan (default is true)
-	//	Rebuild            : rebuild scan for expected limits (require extra toys) (default is false)
-	//	GenerateBinned     : generate binned data sets for toys (default is false) - be careful not to activate with a too large (>=3) number of observables
-	//	NToyRatio          : ratio of S+B/B toys (default is 2)
 	// Enable offset for all roostats
 	RooStats::UseNLLOffset(optHTInv.UseNLLOffset);
 	// Load the workspace from the file
