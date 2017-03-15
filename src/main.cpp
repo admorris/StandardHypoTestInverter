@@ -5,6 +5,14 @@
 // Local
 #include "StandardHypoTestInverter.h"
 
+std::string ParsePositionalOptions(boost::program_options::positional_options_description& positionalOptions)
+{
+	std::string options;
+	for(unsigned i = 0; i < positionalOptions.max_total_count(); i++)
+		options+=" " + positionalOptions.name_for_position(i);
+	return options;
+}
+
 int main(int argc, char* argv[])
 {
 	RooStats::HypoTestInvOptions optHTInv;
@@ -14,9 +22,10 @@ int main(int argc, char* argv[])
 	std::string modelBName;
 	std::string dataName;
 	std::string nuisPriorName;
-	boost::program_options::options_description desc("Allowed options",120);
+	boost::program_options::options_description desc("Allowed options",160);
 	desc.add_options()
-		("help", "produce help message")
+		("ModelB", boost::program_options::value<std::string>(&modelBName)->default_value(""), "optional background model name")
+		("NuisPrior", boost::program_options::value<std::string>(&nuisPriorName)->default_value(""), "optional nuisance prior name")
 		("EnableDetOutput", boost::program_options::value<bool>(&optHTInv.EnableDetOutput)->default_value(false), "enable detailed output with all fit information for each toys (output will be written in result file)")
 		("PlotHypoTestResult", boost::program_options::value<bool>(&optHTInv.PlotHypoTestResult)->default_value(true), "plot test statistic result at each point")
 		("WriteResult", boost::program_options::value<bool>(&optHTInv.WriteResult)->default_value(true), "write HypoTestInverterResult in a file")
@@ -49,24 +58,33 @@ int main(int argc, char* argv[])
 		("TestStatType", boost::program_options::value<int>(&optHTInv.TestStatType)->default_value(2), "= 0 LEP\n= 1 Tevatron\n= 2 Profile Likelihood\n= 3 Profile Likelihood one sided (i.e. = 0 if mu < mu_hat)\n= 4 Profile Likelihood signed ( pll = -pll if mu < mu_hat)\n= 5 Max Likelihood Estimate as test statistic\n= 6 Number of observed event as test statistic")
 		("UseNumberCounting", boost::program_options::value<bool>(&optHTInv.UseNumberCounting)->default_value(false), "set to true when using number counting events")
 		("MinimizerType", boost::program_options::value<std::string>(&optHTInv.MinimizerType)->default_value(""), "minimizer type (default is what is in ROOT::Math::MinimizerOptions::DefaultMinimizerType()")
-		("InputFile", boost::program_options::value<std::string>(&infile)->required(), "input file")
-		("Workspace", boost::program_options::value<std::string>(&wsName)->required(), "workspace name")
-		("ModelSB", boost::program_options::value<std::string>(&modelSBName)->required(), "signal+background model name")
-		("ModelB", boost::program_options::value<std::string>(&modelBName)->default_value(""), "optional background model name")
-		("Data", boost::program_options::value<std::string>(&dataName)->required(), "data name")
-		("NuisPrior", boost::program_options::value<std::string>(&nuisPriorName)->default_value(""), "optional nuisance prior name")
 	;
 	boost::program_options::positional_options_description positionalOptions;
 	positionalOptions.add("InputFile",1);
 	positionalOptions.add("Workspace",1);
 	positionalOptions.add("ModelSB",1);
 	positionalOptions.add("Data",1);
-	boost::program_options::variables_map vmap;
-	boost::program_options::store(boost::program_options::command_line_parser(argc, argv).options(desc).positional(positionalOptions).run(), vmap);
-	boost::program_options::notify(vmap);
-	if(vmap.count("help") || argc == 1)
+	if(argc == 1)
 	{
-		std::cout << desc << "\n";
+		std::cout << "\nUsage: " << argv[0] << ParsePositionalOptions(positionalOptions);
+		std::cout << " [Options]\n\n" << desc << "\n";
+		return 1;
+	}
+	desc.add_options()
+		("InputFile", boost::program_options::value<std::string>(&infile)->required(), "input file")
+		("Workspace", boost::program_options::value<std::string>(&wsName)->required(), "workspace name")
+		("ModelSB", boost::program_options::value<std::string>(&modelSBName)->required(), "signal+background model name")
+		("Data", boost::program_options::value<std::string>(&dataName)->required(), "data name")
+	;
+	boost::program_options::variables_map vmap;
+	try
+	{
+		boost::program_options::store(boost::program_options::command_line_parser(argc, argv).options(desc).positional(positionalOptions).run(), vmap);
+		boost::program_options::notify(vmap);
+	}
+	catch(boost::program_options::required_option& exc)
+	{
+		std::cout << "\nERROR: Required argument missing\n\nUsage: " << argv[0] << ParsePositionalOptions(positionalOptions) << " [Options]\n\nCall " << argv[0] << " without argument to see full list of options.\n\n";
 		return 1;
 	}
 	StandardHypoTestInverter(infile, wsName, modelSBName, modelBName, dataName, nuisPriorName, optHTInv);
