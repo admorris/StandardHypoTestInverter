@@ -10,29 +10,29 @@
 #include "RooAbsCategory.h"
 #include <math.h>
 #include "TMath.h"
-//ClassImp(RooStudentT)
-RooStudentT::RooStudentT(const char *name, const char *title, RooAbsReal& _x, RooAbsReal& _mu, RooAbsReal& _s, RooAbsReal& _n) :
+ClassImp(RooStudentT)
+RooStudentT::RooStudentT(const char *name, const char *title, RooAbsReal& _m, RooAbsReal& _m0, RooAbsReal& _sigma, RooAbsReal& _nu) :
 	RooAbsPdf(name,title),
-	x("x","Observable",this,_x),
-	mu("mu","mu",this,_mu),
-	s("s","s",this,_s),
-	n("n","n",this,_n)
+	m("m","Observable",this,_m),
+	m0("m0","m0",this,_m0),
+	sigma("sigma","sigma",this,_sigma),
+	nu("nu","nu",this,_nu)
 {
 }
 RooStudentT::RooStudentT(const RooStudentT& other, const char* name) :
 	RooAbsPdf(other,name),
-	x("x",this,other.x),
-	mu("mu",this,other.mu),
-	s("s",this,other.s),
-	n("n",this,other.n)
+	m("m",this,other.m),
+	m0("m0",this,other.m0),
+	sigma("sigma",this,other.sigma),
+	nu("nu",this,other.nu)
 {
 }
 Double_t RooStudentT::evaluate() const
 {
 	// ENTER EXPRESSION IN TERMS OF VARIABLE ARGUMENTS HERE
-	const double xmu2 = (x - mu)*(x-mu);
-	const double ns2 = n*s*s;
-	const double factor = pow((1 + (xmu2/ns2)), 0.5*(n+1));
-	const double Z = sqrt(TMath::Pi()*n*s*s)*TMath::Gamma(0.5*n)/TMath::Gamma(0.5*(n+1));
+	const double mm02 = (m - m0)*(m-m0);
+	const double ns2 = nu*sigma*sigma;
+	const double factor = pow((1 + (mm02/ns2)), 0.5*(nu+1));
+	const double Z = sqrt(TMath::Pi()*ns2)*TMath::Gamma(0.5*nu)/TMath::Gamma(0.5*(nu+1));
 	return 1./(factor*Z) ;
 }

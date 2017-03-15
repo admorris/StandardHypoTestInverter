@@ -14,17 +14,17 @@ class RooStudentT : public RooAbsPdf
 {
 public:
 	RooStudentT() {}
-	RooStudentT(const char *name, const char *title, RooAbsReal& _x, RooAbsReal& _mu, RooAbsReal& _s, RooAbsReal& _n);
+	RooStudentT(const char *name, const char *title, RooAbsReal& _m, RooAbsReal& _m0, RooAbsReal& _sigma, RooAbsReal& _nu);
 	RooStudentT(const RooStudentT& other, const char* name=0);
 	virtual TObject* clone(const char* newname) const { return new RooStudentT(*this,newname); }
 	inline virtual ~RooStudentT() {}
 protected:
-	RooRealProxy x;
-	RooRealProxy mu;
-	RooRealProxy s;
-	RooRealProxy n;
+	RooRealProxy m;
+	RooRealProxy m0;
+	RooRealProxy sigma;
+	RooRealProxy nu;
 	Double_t evaluate() const;
 private:
-//	ClassDef(RooStudentT,1)
+	ClassDef(RooStudentT,2)
 };
 #endif
