@@ -26,7 +26,7 @@ OBJS      := $(patsubst $(SRCDIR)/%.$(SRCEXT), $(OBJDIR)/%.$(OBJEXT), $(SRCS))
 OUTPUT     = $(OBJDIR)/*.$(OBJEXT) $(BINDIR)/*
 # Compiler flags
 CXXFLAGS   = -Wall -fPIC -I$(HDRDIR) $(ROOTCFLAGS)
-LIBFLAGS   = -Wl,--no-undefined -Wl,--no-allow-shlib-undefined $(ROOTLIBS) $(EXTRA_ROOTLIBS) -Wl,-rpath,$(ROOTLIBDIR)
+LIBFLAGS   = -Wl,--no-undefined -Wl,--no-allow-shlib-undefined $(ROOTLIBS) $(EXTRA_ROOTLIBS) -Wl,-rpath,$(ROOTLIBDIR) -lboost_program_options
 # Rules
 .PHONY : all clean
 # Default

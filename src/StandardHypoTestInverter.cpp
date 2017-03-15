@@ -3,7 +3,7 @@
 // Local
 #include "HypoTestInvTool.h"
 // Adapted from https://root.cern.ch/doc/v608/StandardHypoTestInvDemo_8C.html
-void StandardHypoTestInverter(std::string infile, std::string wsName, std::string modelSBName, std::string modelBName, std::string dataName, std::string nuisPriorName)
+void StandardHypoTestInverter(std::string infile, std::string wsName, std::string modelSBName, std::string modelBName, std::string dataName, std::string nuisPriorName, RooStats::HypoTestInvOptions& optHTInv)
 {
 	// Try to open the file
 	TFile *file = TFile::Open(infile.c_str());
@@ -28,7 +28,6 @@ void StandardHypoTestInverter(std::string infile, std::string wsName, std::strin
 	//	Rebuild            : rebuild scan for expected limits (require extra toys) (default is false)
 	//	GenerateBinned     : generate binned data sets for toys (default is false) - be careful not to activate with a too large (>=3) number of observables
 	//	NToyRatio          : ratio of S+B/B toys (default is 2)
-	RooStats::HypoTestInvOptions optHTInv;
 	// Enable offset for all roostats
 	RooStats::UseNLLOffset(optHTInv.UseNLLOffset);
 	// Load the workspace from the file
