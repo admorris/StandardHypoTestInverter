@@ -28,7 +28,7 @@ LIBDIR     = lib
 
 # Get files and make list of objects and libraries
 SRCS      := $(shell find $(SRCDIR) -name '*.$(SRCEXT)')
-HDRS      := $(shell find $(HDRDIR) -name '*.$(HDREXT)')
+HDRS      := $(shell find $(HDRDIR) -name '*.$(HDREXT)' | grep -v 'LinkDef') # LinkDef.h must be last, and find can result in a random order
 OBJS      := $(patsubst $(SRCDIR)/%.$(SRCEXT),$(OBJDIR)/%.$(OBJEXT),$(SRCS))
 
 # Where the output is
@@ -50,7 +50,7 @@ libdir :
 $(LIBDIR)/lib%.$(LIBEXT) : $(OBJS) $(OBJDIR)/$(MAIN)_dict.$(OBJEXT) | $(LIBDIR)
 	@echo "Making shared object $@"
 	@$(CC) -shared $^ -o $@ $(ROOTLIBFLAGS)
-$(SRCDIR)/%_dict.$(SRCEXT) : $(HDRS) | $(LIBDIR)
+$(SRCDIR)/%_dict.$(SRCEXT) : $(HDRS) $(HDRDIR)/LinkDef.h | $(LIBDIR)
 	@echo "Generating $@"
 	@$(RC) -f $@ -c $^
 	@mv $(patsubst %_dict.$(SRCEXT),%_dict_rdict.pcm,$@) $(LIBDIR)
