@@ -530,11 +530,7 @@ namespace RooStats
 		if(options.CalculatorType == 1)
 			typeName = "Hybrid";
 		else if(options.CalculatorType == 2 || options.CalculatorType == 3)
-		{
-			typeName = "Asymptotic";
-			Warning("HypoTestInvTool::PlotResults", "Cannot plot this CalculatorType: %s (%d)", typeName.c_str(), options.CalculatorType);
-			return;
-		}
+			typeName = "Asymptotic" + std::to_string(options.CalculatorType);
 		else
 			Warning("HypoTestInvTool::PlotResults", "Not sure what to do with CalculatorType %d", options.CalculatorType);
 		std::string resultName = r.GetName();
@@ -546,6 +542,11 @@ namespace RooStats
 		c1.SetLogy(true);
 		plot.Draw("CLb 2CL");  // plot all and Clb
 		c1.SaveAs(((std::string)c1.GetName()+".root").c_str());
+		if(options.CalculatorType == 2 || options.CalculatorType == 3)
+		{
+			Warning("HypoTestInvTool::PlotResults", "Cannot plot test statistics for this CalculatorType: %s (%d)", typeName.c_str(), options.CalculatorType);
+			return;
+		}
 		const int nEntries = r.ArraySize();
 		TCanvas c2("Test_Stat_Plots");
 		if(nEntries > 1)
@@ -564,4 +565,3 @@ namespace RooStats
 		c2.SaveAs(((std::string)c2.GetName()+".root").c_str());
 	}
 } // end namespace RooStats
-
